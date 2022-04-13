@@ -59,7 +59,7 @@ string FileRepository::sourceUnitNameToUri(string const& _sourceUnitName) const
 
 string FileRepository::uriToSourceUnitName(string const& _path) const
 {
-	return stripFileUriSchemePrefix(_path); // TODO(pr): Verify that this produces also absolute Windows-OS paths.
+	return stripFileUriSchemePrefix(_path);
 }
 
 void FileRepository::setSourceByUri(string const& _uri, string _source)
