@@ -252,8 +252,7 @@ void LanguageServer::handleInitialize(MessageID _id, Json::Value const& _args)
 			ErrorCode::InvalidParams,
 			"rootUri only supports file URI scheme."
 		);
-
-		rootPath = rootPath.substr(7);
+		rootPath = stripFileUriSchemePrefix(rootPath);
 	}
 	else if (Json::Value rootPath = _args["rootPath"])
 		rootPath = rootPath.asString();

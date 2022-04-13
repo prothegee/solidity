@@ -37,42 +37,29 @@ using namespace solidity::frontend;
 using solidity::util::readFileAsString;
 using solidity::util::joinHumanReadable;
 
-namespace
-{
-
-string stripFilePrefix(string const& _path)
-{
-	regex const windowsDriveLetterPath("^file:///[a-zA-Z]:/");
-	if (regex_search(_path, windowsDriveLetterPath))
-		return _path.substr(10);
-	if (_path.find("file://") == 0)
-		return _path.substr(7);
-	else
-		return _path;
-}
-
-}
-
-FileRepository::FileRepository(boost::filesystem::path _basePath):
-	m_basePath(std::move(_basePath))
+FileRepository::FileRepository(boost::filesystem::path _basePath): m_basePath(std::move(_basePath))
 {
 }
 
 string FileRepository::sourceUnitNameToUri(string const& _sourceUnitName) const
 {
+	regex const windowsDriveLetterPath("^[a-zA-Z]:/");
+
 	if (m_sourceUnitNamesToUri.count(_sourceUnitName))
 		return m_sourceUnitNamesToUri.at(_sourceUnitName);
 	else if (_sourceUnitName.find("file://") == 0)
 		return _sourceUnitName;
+	else if (regex_search(_sourceUnitName, windowsDriveLetterPath))
+		return "file:///" + _sourceUnitName;
 	else if (_sourceUnitName.find("/") == 0)
 		return "file://" + _sourceUnitName;
 	else
-		return "file://" + m_basePath.generic_string() + "/" + _sourceUnitName; // TODO(pr): ensure Windows drive letters end up here.
+		return "file://" + m_basePath.generic_string() + "/" + _sourceUnitName;
 }
 
 string FileRepository::uriToSourceUnitName(string const& _path) const
 {
-	return stripFilePrefix(_path); // TODO(pr): Verify that this produces also absolute Windows-OS paths.
+	return stripFileUriSchemePrefix(_path); // TODO(pr): Verify that this produces also absolute Windows-OS paths.
 }
 
 void FileRepository::setSourceByUri(string const& _uri, string _source)
@@ -97,9 +84,7 @@ frontend::ReadCallback::Result FileRepository::readFile(string const& _kind, str
 		if (m_sourceCodes.count(_sourceUnitName))
 			return ReadCallback::Result{true, m_sourceCodes.at(_sourceUnitName)};
 
-		string strippedSourceUnitName = _sourceUnitName;
-		if (strippedSourceUnitName.find("file://") == 0)
-			strippedSourceUnitName.erase(0, 7);
+		string strippedSourceUnitName = stripFileUriSchemePrefix(_sourceUnitName);
 
 		if (boost::filesystem::path(strippedSourceUnitName).has_root_path() &&
 			boost::filesystem::exists(strippedSourceUnitName)
