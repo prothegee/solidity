@@ -25,8 +25,6 @@
 #include <range/v3/range/conversion.hpp>
 #include <range/v3/view/transform.hpp>
 
-#include <fmt/format.h>
-
 #include <regex>
 
 using namespace std;

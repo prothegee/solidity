@@ -22,8 +22,6 @@
 #include <libsolidity/lsp/FileRepository.h>
 #include <libsolidity/lsp/Utils.h>
 
-#include <fmt/format.h>
-
 #include <regex>
 #include <fstream>
 

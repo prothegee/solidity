@@ -37,8 +37,6 @@
 #include <boost/filesystem.hpp>
 #include <boost/algorithm/string/predicate.hpp>
 
-#include <fmt/format.h>
-
 #include <ostream>
 #include <string>
 

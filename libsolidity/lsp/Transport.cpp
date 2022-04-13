@@ -23,7 +23,6 @@
 #include <liblangutil/Exceptions.h>
 
 #include <boost/algorithm/string.hpp>
-#include <fmt/format.h>
 
 #include <iostream>
 #include <sstream>
