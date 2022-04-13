@@ -18,7 +18,6 @@
 #pragma once
 
 #include <libsolidity/interface/FileReader.h>
-#include <libsolidity/interface/ImportRemapper.h>
 
 #include <string>
 #include <map>
